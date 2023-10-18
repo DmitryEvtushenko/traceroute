@@ -19,5 +19,5 @@ if __name__ == '__main__':
     if not vars(args):
         parser.print_usage()
     else:
-        traceroute = TraceRouter(args.IP_ADDRESS, args.port, args.seq, args.timeout, args.ttl)
+        traceroute = TraceRouter(args.IP_ADDRESS, args.port, args.seq, args.timeout, args.retry, args.ttl)
         traceroute.get_trace()
