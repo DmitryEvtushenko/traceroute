@@ -1,5 +1,6 @@
 import argparse
 from trace_router import TraceRouter
+import socket
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Traceroute tracks the path of a packet to a given node.')
@@ -19,5 +20,6 @@ if __name__ == '__main__':
     if not vars(args):
         parser.print_usage()
     else:
-        traceroute = TraceRouter(args.IP_ADDRESS, args.port, args.seq, args.timeout, args.retry, args.ttl)
+        host = socket.gethostbyname(args.IP_ADDRESS)
+        traceroute = TraceRouter(host, args.port, args.seq, args.timeout, args.retry, args.ttl)
         traceroute.get_trace()
