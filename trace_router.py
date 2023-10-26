@@ -5,7 +5,8 @@ from scapy.layers.inet import IP
 
 
 class TraceRouter:
-    def __init__(self, ip_address, port=80, seq=1, timeout=0.5, max_ttl=20, packet_size=40, requests_count=4, time_interval=0.2, debug=False):
+    def __init__(self, ip_address, port=80, seq=1, timeout=0.5, max_ttl=20, packet_size=40, requests_count=4,
+                 time_interval=0.2, debug=False):
         self.ip = ip_address
         self.port = port
         self.timeout = timeout
@@ -47,13 +48,12 @@ class TraceRouter:
                 print(f'The packet delivered to the address {self.ip} {self.get_name_by_host(self.ip)} successfully')
 
             if len(pings) > 0:
-                average_ping = "{:.1f}".format(sum(int(p) for p in pings)/len(pings))
+                average_ping = "{:.1f}".format(sum(int(p) for p in pings) / len(pings))
                 self.print_request_status(ttl, average_ping, ', '.join(list(srcs)), 'Ok')
             else:
                 self.print_request_status(ttl, '*', '*', 'Request timeout exceeded.')
             if self.ip in srcs:
                 return
-
 
     def get_node_info(self, ttl, protocol_packet):
         ip_packet = IP(dst=self.ip, ttl=ttl)
@@ -68,10 +68,12 @@ class TraceRouter:
             host_name = ''
 
         if self.debug:
-            print(f'The packet was sent within time {ping} to the address {ip_addr} ({host_name}) with status \"{status}\"')
+            print(
+                f'The packet was sent within time {ping} to the address {ip_addr} ({host_name}) with status \"{status}\"')
             return
 
-        print(f'{str(number).ljust(15)} {str(ping).ljust(15)}  {str(ip_addr).rjust(30)}  {host_name.ljust(20)} {status.ljust(10)}')
+        print(
+            f'{str(number).ljust(15)} {str(ping).ljust(15)}  {str(ip_addr).rjust(30)}  {host_name.ljust(20)} {status.ljust(10)}')
 
     def get_name_by_host(self, ip_addr):
         return ipwhois.IPWhois(ip_addr).lookup_whois()['nets'][0]['name']

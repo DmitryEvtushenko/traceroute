@@ -1,6 +1,7 @@
 import argparse
-from trace_router import TraceRouter
 import socket
+
+from trace_router import TraceRouter
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Traceroute tracks the path of a packet to a given node.')
@@ -17,7 +18,6 @@ if __name__ == '__main__':
                         help='Setting the time interval between requests')
     parser.add_argument('IP_ADDRESS', help='Sets the target IP address')
 
-
     args = parser.parse_args()
     # args = parser.parse_args("python main.py -p 80 -t 1 176.100.119.169".split())
     # print(args)
@@ -25,5 +25,6 @@ if __name__ == '__main__':
         parser.print_usage()
     else:
         host = socket.gethostbyname(args.IP_ADDRESS)
-        traceroute = TraceRouter(host, args.port, args.seq, args.timeout, args.ttl, args.packet_size, args.request_count, args.time_interval, args.debug)
+        traceroute = TraceRouter(host, args.port, args.seq, args.timeout, args.ttl, args.packet_size,
+                                 args.request_count, args.time_interval, args.debug)
         traceroute.get_trace()
