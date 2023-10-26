@@ -8,11 +8,13 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', type=int, help='Specifies the resource port')
     parser.add_argument('-seq', '--seq', type=int, default=1, help='Sets SEQ')
     parser.add_argument('-ttl', '--ttl', default=15, type=int, help='Sets the maximum time to live for package')
-    parser.add_argument('-pkg', '--package_size', default=40, type=int, help='Sets a packet size')
-    parser.add_argument('-try', '--retry', type=int, default=20,
-                        help='Sets the maximum number of attempts to send a packet and obtain information about the end node')
+    parser.add_argument('-pkg', '--packet_size', default=40, type=int, help='Sets a packet size')
     parser.add_argument('-debug', '--debug', type=bool, default=False,
-                        help='Sets the maximum number of attempts to send a packet and obtain information about the end node')
+                        help='Print all information about packets')
+    parser.add_argument('-rc', '--request_count', type=int, default=4,
+                        help='Requests count')
+    parser.add_argument('-interval', '--time_interval', type=float, default=0.5,
+                        help='Setting the time interval between requests')
     parser.add_argument('IP_ADDRESS', help='Sets the target IP address')
 
 
@@ -23,5 +25,5 @@ if __name__ == '__main__':
         parser.print_usage()
     else:
         host = socket.gethostbyname(args.IP_ADDRESS)
-        traceroute = TraceRouter(host, args.port, args.seq, args.timeout, args.retry, args.ttl, args.debug)
+        traceroute = TraceRouter(host, args.port, args.seq, args.timeout, args.ttl, args.packet_size, args.request_count, args.time_interval, args.debug)
         traceroute.get_trace()
