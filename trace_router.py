@@ -6,7 +6,7 @@ from scapy.layers.inet import IP
 
 class TraceRouter:
     def __init__(self, ip_address, port=80, seq=1, timeout=0.5, max_ttl=20, packet_size=40, requests_count=4,
-                 time_interval=0.2, debug=False):
+                 time_interval=0.4, debug=False):
         self.ip = ip_address
         self.port = port
         self.timeout = timeout
@@ -40,8 +40,6 @@ class TraceRouter:
                     srcs.add(src)
                     pings += [packet_sending_time]
 
-                    self.ip_addresses += [src]
-
                 time.sleep(self.time_interval)
 
             if self.debug:
@@ -49,16 +47,20 @@ class TraceRouter:
 
             if len(pings) > 0:
                 average_ping = "{:.1f}".format(sum(int(p) for p in pings) / len(pings))
+                self.ip_addresses += [list(srcs)]
                 self.print_request_status(ttl, average_ping, ', '.join(list(srcs)), 'Ok')
             else:
                 self.print_request_status(ttl, '*', '*', 'Request timeout exceeded.')
             if self.ip in srcs:
-                return
+                break
+
+        print('Path is ' + ' -> '.join(f'({" or ".join(ip_addresses_part)})' for ip_addresses_part in self.ip_addresses))
+
 
     def get_node_info(self, ttl, protocol_packet):
         ip_packet = IP(dst=self.ip, ttl=ttl)
         packet = ip_packet / protocol_packet / self.data
-        reply = sr1(packet, verbose=self.debug, timeout=self.timeout)
+        reply = sr1(packet, verbose=False, timeout=self.timeout)
         return reply, packet
 
     def print_request_status(self, number, ping, ip_addr, status):
